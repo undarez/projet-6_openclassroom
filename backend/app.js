@@ -1,5 +1,5 @@
 const express = require('express');
-require ('dotenv').config();
+require ('dotenv').config({path:"../.env"});
 const app = express();
 // import de cors qui permet de facilité la communication entre le back et le front qui ont des orrigine diffs.
 const cors = require('cors');
@@ -15,7 +15,7 @@ const multer = require ('multer');
 const upload = multer({});
 
 
-
+// console.log(process.env.MONGODB_URI)
 // importer mongoose 
 const mongoose = require ('mongoose');
 mongoose.set('strictQuery', true);
