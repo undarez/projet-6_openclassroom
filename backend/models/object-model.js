@@ -11,14 +11,16 @@ const thingschema = mongoose.Schema({
     mainPepper: { type: String, required: true},
     imageUrl: { type: String, required: true},
     heat: { type: Number, required: true},
-    likes: { type: Number, required: true},
-    dislikes: { type: Number, required: true},
-    userLiked: { type: [String], required: true}, // — tableau des identifiants des utilisateurs
+    likes: { type: Number, default:0 },
+    dislikes: { type: Number, default: 0} ,
+    usersLiked: { type: [String], required: true}, // — tableau des identifiants des utilisateurs
     // qui ont aimé (= liked) la sauce
-    userDisliked: { type: [String], required: true}, //  — tableau des identifiants des
+    usersDisliked: { type: [String], required: true}, //  — tableau des identifiants des
     // utilisateurs qui n'ont pas aimé (= disliked) la sauce
-    
-    
-});
-
-module.export = mongoose.model('thing', thingschema)
+},
+//ajout de timestamps =heure a la quelle l'objet a ete créer methode de mongodb 
+{
+    timestamps: true,
+}
+);
+module.exports = mongoose.model('object-model', thingschema)
