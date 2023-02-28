@@ -1,4 +1,5 @@
 const express = require('express');
+require ('dotenv').config();
 const app = express();
 // import de cors qui permet de facilité la communication entre le back et le front qui ont des orrigine diffs.
 const cors = require('cors');
@@ -13,12 +14,14 @@ app.use(express.json())
 const multer = require ('multer');
 const upload = multer({});
 
+
+
 // importer mongoose 
 const mongoose = require ('mongoose');
 mongoose.set('strictQuery', true);
 
 // adress serveur monbodb
-mongoose.connect('mongodb+srv://chocolat800:stringfalse@cluster0.qzvcie7.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.MONGODB_URI,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
