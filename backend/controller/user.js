@@ -8,7 +8,7 @@ const User = require('../models/users_model')
 
 exports.signup = (req, res, next) => {
     //  hash crypt le mot de pass et 10 veut dire que le hash fait 10 tour ce qui sécurise le mot de pass et crypte
-    console.log(req.body)
+    // console.log(req.body)
     bcrypt.hash(req.body.password, 10)
     .then(hash =>{
         const user = new User({

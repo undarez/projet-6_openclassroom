@@ -8,12 +8,12 @@ const sauce = require('../models/object-model');
 // appel de post pour authentification et création d'objet
 //=======================creation======================
 exports.createThing = (req, res, next) => {
-    const thingObject = JSON.parse(req.body.sauce);
-    delete thingObject._id;
+    const SauceObject = JSON.parse(req.body.sauce);
+    delete SauceObject._id;
     //  supprimer le userId car on ne doit poas faire confiance au client on c'est jamais si cet utilisateur a utiliser des donner d'une personne
-    delete thingObject._userId;
-    const thing = new sauce({
-        ...thingObject,
+    delete SauceObject._userId;
+    const Sauce = new sauce({
+        ...SauceObject,
         likes: 0,
         dislikes: 0,
         usersLiked: [],
@@ -23,7 +23,7 @@ exports.createThing = (req, res, next) => {
     });
     console.log(req.file.filename)
     helmet()
-    thing.save()
+    Sauce.save()
         .then(() => { res.status(201).json({ message: 'objet enregistrer !' }) })
         .catch(error => { res.status(400).json(error) })
 };
@@ -33,17 +33,17 @@ exports.createThing = (req, res, next) => {
 
 exports.modifyThing = (req, res, next) => {
     //si l'objet existe
-    const thingObject = req.file ? {
+    const SauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
     // suppimer userId pour eviter que un utilisateur utilise des donner d'une autre personne existante .
 
     //=======================gere modif ou pas les articles======================
-    delete thingObject._userId;
+    delete SauceObject._userId;
     sauce.findOne({ _id: req.params.id })
-        .then((thing) => {
-            if (thing.userId != req.auth.userId) {
+        .then((Sauce) => {
+            if (Sauce.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Non autorisé' });
             } else {
 
@@ -57,8 +57,8 @@ exports.modifyThing = (req, res, next) => {
 // supprimer l'objet de l'utilisateur qui le demande.
 exports.deleteThing = (req, res, next) => {
     sauce.findOne({ _id: req.params.id })
-        .then(thing => {
-            if (thing.userId != req.auth.userId) {
+        .then(Sauce => {
+            if (Sauce.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Non-autorisé' })
             } else {
                 // supprimer l'objet et supprimer l'image du systeme du fichier grace au split qui prend le premier élement du tableau
@@ -85,13 +85,13 @@ exports.deleteThing = (req, res, next) => {
 exports.getOneThing = (req, res, next) => {
     // req.params = est un objet qui contien des prompriétés des parametres de la requete ici la requete contient un objet avec la proprieter id
     sauce.findOne({ _id: req.params.id })
-        .then(thing => res.status(200).json(thing))
+        .then(Sauce => res.status(200).json(Sauce))
         .catch(error => res.status(404).json({ error }));
 };
 //=======================all sauces======================
 // récupérer touts les things = sauces
 exports.getFindThing = (req, res, next) => {
     sauce.find()
-        .then(things => res.status(200).json(things))
+        .then(Sauces => res.status(200).json(Sauces))
         .catch(error => res.status(400).json({ error }));
 };
