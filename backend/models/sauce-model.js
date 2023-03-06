@@ -1,9 +1,8 @@
 const mongoose = require ('mongoose');
 
-
 // créer un objet qui permet de configurer les donnée obligatoire a renseigner pour que cela fonctionne donc c'est un model
 // model pour les sauces
-const thingschema = mongoose.Schema({
+const sauceSchemat = mongoose.Schema({
     userId: { type: String, required: true},
     name: { type: String, required: true},
     manufacturer: { type: String, required: true},
@@ -23,4 +22,4 @@ const thingschema = mongoose.Schema({
     timestamps: true,
 }
 );
-module.exports = mongoose.model('object-model', thingschema)
+module.exports = mongoose.model('sauces', sauceSchemat)

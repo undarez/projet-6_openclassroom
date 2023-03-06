@@ -1,13 +1,12 @@
 const User = require('../models/users_model')
 const flatted = require('flatted')
 // import de fs = file systeme (Il nous donne accès aux fonctions qui nous permettent de modifier le système de fichiers, y compris aux fonctions permettant de supprimer les fichiers.)
-const helmet = require('helmet')
 const fs = require('fs')
-const sauce = require('../models/object-model');
+const sauce = require('../models/sauce-model');
 
 // appel de post pour authentification et création d'objet
 //=======================creation======================
-exports.createThing = (req, res, next) => {
+exports.createSauce = (req, res, next) => {
     const SauceObject = JSON.parse(req.body.sauce);
     delete SauceObject._id;
     //  supprimer le userId car on ne doit poas faire confiance au client on c'est jamais si cet utilisateur a utiliser des donner d'une personne
@@ -21,8 +20,7 @@ exports.createThing = (req, res, next) => {
         userId: req.auth.userId,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-    console.log(req.file.filename)
-    helmet()
+    // console.log(req.file.filename)
     Sauce.save()
         .then(() => { res.status(201).json({ message: 'objet enregistrer !' }) })
         .catch(error => { res.status(400).json(error) })
@@ -31,7 +29,7 @@ exports.createThing = (req, res, next) => {
 //=======================modif======================
 // modifier le thing pour pouvoir modifier le prix ou meme la quantité de l'article par l'utilisateur
 
-exports.modifyThing = (req, res, next) => {
+exports.modifySauce = (req, res, next) => {
     //si l'objet existe
     const SauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
@@ -47,7 +45,7 @@ exports.modifyThing = (req, res, next) => {
                 res.status(401).json({ message: 'Non autorisé' });
             } else {
 
-                sauce.updateOne({ _id: req.params.id }, { ...thingObject, _id: req.params.id })
+                sauce.updateOne({ _id: req.params.id }, { ...SauceObject, _id: req.params.id })
                     .then(() => res.status(200).json({ message: 'Objet modifié!' }))
                     .catch(error => res.status(401).json({ error }));
             }
@@ -55,7 +53,7 @@ exports.modifyThing = (req, res, next) => {
 }
 
 // supprimer l'objet de l'utilisateur qui le demande.
-exports.deleteThing = (req, res, next) => {
+exports.deleteSauce = (req, res, next) => {
     sauce.findOne({ _id: req.params.id })
         .then(Sauce => {
             if (Sauce.userId != req.auth.userId) {
@@ -74,7 +72,7 @@ exports.deleteThing = (req, res, next) => {
 }
 //=======================suppression======================
 // supprimer un thing 
-exports.deleteThing = (req, res, next) => {
+exports.deleteSauce = (req, res, next) => {
     sauce.deleteOne({ _id: req.params.id })
         .then(() => res.status(200).json({ message: 'objet supprimé' }))
         .catch(error => res.status(400).json({ error }));
@@ -82,7 +80,7 @@ exports.deleteThing = (req, res, next) => {
 
 //=======================one sauce======================
 // recupérer un thing specifique = sauce
-exports.getOneThing = (req, res, next) => {
+exports.getOneSauce = (req, res, next) => {
     // req.params = est un objet qui contien des prompriétés des parametres de la requete ici la requete contient un objet avec la proprieter id
     sauce.findOne({ _id: req.params.id })
         .then(Sauce => res.status(200).json(Sauce))
@@ -90,7 +88,7 @@ exports.getOneThing = (req, res, next) => {
 };
 //=======================all sauces======================
 // récupérer touts les things = sauces
-exports.getFindThing = (req, res, next) => {
+exports.getFindSauce = (req, res, next) => {
     sauce.find()
         .then(Sauces => res.status(200).json(Sauces))
         .catch(error => res.status(400).json({ error }));
